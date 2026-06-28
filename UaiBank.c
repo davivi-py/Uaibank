@@ -13,7 +13,8 @@ typedef struct
 
 int main()
 {
-    int total_users = 0; // Rastreador da quantidade de usuários registrados
+    int total_users = 0; // Rastreador da quantidade de usuários ativos
+    int next_id = 1;     // Contador global de ID — só cresce, nunca reutiliza
     user *clientes = NULL; // Ponteiro inicializado nulo, sem memória alocada ainda
     int opcao;
 
@@ -29,8 +30,9 @@ int main()
                 // Solicita ao sistema operacional a realocação de memória com o novo tamanho
                 clientes = realloc(clientes, total_users * sizeof(user));
 
-                // O ID será sequencial, correspondendo ao contador atual
-                clientes[total_users-1].id = total_users;
+                // O ID vem do contador global, que nunca é reutilizado
+                clientes[total_users-1].id = next_id;
+                next_id++;
 
                 // Lê a string do nome até encontrar a vírgula, e depois os números.
                 // O espaço no início de " %[^,]" consome a quebra de linha residual do buffer.
@@ -39,7 +41,6 @@ int main()
                       &clientes[total_users-1].idade,
                       &clientes[total_users-1].saldo_atual);
 
-                // Saída idêntica à especificação do projeto
                 printf("Usuário inserido com id %d.\n", clientes[total_users-1].id);
                 
                 break;
@@ -49,7 +50,7 @@ int main()
                 int n;
                 scanf("%d", &n); // Lê a quantidade de usuários a serem inseridos de uma vez
 
-                int id_inicial = total_users + 1; // Guarda qual será o ID do primeiro desse lote
+                int id_inicial = next_id; // Guarda qual será o ID do primeiro desse lote
 
                 // Laço para ler e alocar os 'n' usuários
                 for(int i = 0; i < n; i++)
@@ -57,7 +58,8 @@ int main()
                     total_users++;
                     
                     clientes = realloc(clientes, total_users * sizeof(user));
-                    clientes[total_users-1].id = total_users;
+                    clientes[total_users-1].id = next_id;
+                    next_id++;
 
                     scanf(" %[^,], %d, %lf",
                         clientes[total_users-1].nome,
