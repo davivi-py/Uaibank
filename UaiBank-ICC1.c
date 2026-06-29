@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h> // Necessário para malloc, realloc e free
+#include <stdlib.h> 
 
-// Definição da estrutura do usuário
+// Definição da struct do usuário
 typedef struct 
 {
     int id;
@@ -14,32 +14,31 @@ typedef struct
 int main()
 {
     int total_users = 0; // Rastreador da quantidade de usuários ativos
-    int next_id = 1;     // Contador global de ID — só cresce, nunca reutiliza
-    user *clientes = NULL; // Ponteiro inicializado nulo, sem memória alocada ainda
+    int next_id = 1;     // Contador >> global << de ID 
+    user *clientes = NULL; // Ponteiro inicializado nulo sem memória alocada ainda
     int opcao;
 
-    // O laço while continua lendo os comandos de entrada até o arquivo/teclado acabar (EOF)
+    // O laço while continua lendo os comandos de entrada até o teclado acabar de digitar
     while(scanf("%d", &opcao) != EOF)
     {
         switch (opcao)
         {
             case 1:
             {
-                total_users++; // Incrementa o total antes de alocar a memória
+                total_users++; // Incrementa o total de users antes de alocar a memória
 
-                // Solicita ao sistema operacional a realocação de memória com o novo tamanho
+                // realocação de memória com o novo tamanho
                 clientes = realloc(clientes, total_users * sizeof(user));
 
                 // O ID vem do contador global, que nunca é reutilizado
                 clientes[total_users-1].id = next_id;
                 next_id++;
 
-                // Lê a string do nome até encontrar a vírgula, e depois os números.
-                // O espaço no início de " %[^,]" consome a quebra de linha residual do buffer.
+                // lê a string do nome até encontrar a vírgula e depois os números
                 scanf(" %[^,], %d, %lf",
-                      clientes[total_users-1].nome,
-                      &clientes[total_users-1].idade,
-                      &clientes[total_users-1].saldo_atual);
+                    clientes[total_users-1].nome,
+                    &clientes[total_users-1].idade,
+                    &clientes[total_users-1].saldo_atual);
 
                 printf("Usuário inserido com id %d.\n", clientes[total_users-1].id);
                 
@@ -48,11 +47,11 @@ int main()
             case 2:
             {
                 int n;
-                scanf("%d", &n); // Lê a quantidade de usuários a serem inseridos de uma vez
+                scanf("%d", &n); //le a quantidade de usuários a serem inseridos de uma vez
 
-                int id_inicial = next_id; // Guarda qual será o ID do primeiro desse lote
+                int id_inicial = next_id; // guarda qual será o ID do primeiro desse lote
 
-                // Laço para ler e alocar os 'n' usuários
+                // laço para ler e alocar os 'n' usuários
                 for(int i = 0; i < n; i++)
                 {
                     total_users++;
@@ -67,7 +66,7 @@ int main()
                         &clientes[total_users-1].saldo_atual);
                 }
 
-                // Lógica de formatação para imprimir a mensagem correta exigida pelo PDF
+                // logica de formatação para imprimir a mensagem correta exigida pelo PDF
                 if (n == 1) 
                 {
                     printf("Usuário inserido com id %d.\n", id_inicial);
@@ -75,15 +74,15 @@ int main()
                 else 
                 {
                     printf("Usuários inseridos com id ");
-                    // Imprime a lista de IDs inseridos, formatando o final com "e" e ponto.
+                    // imprime a lista de IDs inseridos formatando o final com "e" e ponto.
                     for(int k = id_inicial; k <= total_users; k++) 
                     {
                         if (k == total_users) {
-                            printf("%d.\n", k); // Último da lista
+                            printf("%d.\n", k); // ultimo da lista
                         } else if (k == total_users - 1) {
-                            printf("%d e ", k); // Penúltimo da lista
+                            printf("%d e ", k); // penultimo da lista
                         } else {
-                            printf("%d, ", k); // Demais itens
+                            printf("%d, ", k); // demais itens
                         }
                     }
                 }
@@ -94,9 +93,9 @@ int main()
                 int id_busca;
                 scanf("%d", &id_busca);
 
-                int encontrou = 0; // Flag para rastrear o resultado (0 = falso, 1 = verdadeiro)
+                int encontrou = 0; // variavel pra rastrear o resultado (0 = falso, 1 = verdadeiro)
 
-                // Varre o vetor sequencialmente
+                // varre o vetor sequencialmente
                 for(int i = 0; i < total_users; i++)
                 {
                     if(clientes[i].id == id_busca)
@@ -104,11 +103,11 @@ int main()
                         encontrou = 1;
                         // %.2lf força a impressão de apenas duas casas decimais no saldo
                         printf("Usuário %d tem saldo de R$%.2lf.\n", clientes[i].id, clientes[i].saldo_atual);
-                        break; // Interrompe a varredura ao encontrar o alvo
+                        break; // interrompe a varredura ao encontrar o alvo
                     }
                 }
 
-                // Checagem externa para garantir que o vetor inteiro foi percorrido
+                // checagem externa para garantir que o vetor inteiro foi percorrido
                 if(encontrou == 0)
                 {
                     printf("Erro: Usuário %d não encontrado.\n", id_busca);
@@ -125,7 +124,7 @@ int main()
                 int indice_origem = -1;
                 int indice_destino = -1;
 
-                // Identifica os índices no vetor de origem e destino simultaneamente
+                // identifica os indices no vetor de origem e destino simultaneamente
                 for(int i = 0; i < total_users; i++)
                 {
                     if(clientes[i].id == id_origem) {
@@ -136,13 +135,13 @@ int main()
                     }
                 }
 
-                // Condição 1: Ambos os índices precisam ser diferentes de -1 (existem)
+                //ambos os índices precisam ser diferentes de -1 (existem)
                 if(indice_origem != -1 && indice_destino != -1)
                 {
-                    // Condição 2: Regra de saldo não negativo
+                    // verificar se saldo não é negativo
                     if(clientes[indice_origem].saldo_atual >= quantia)
                     {
-                        // Efetua a transação matemática na memória
+                        // calcula o saldo atual
                         clientes[indice_origem].saldo_atual -= quantia;
                         clientes[indice_destino].saldo_atual += quantia;
                     }
@@ -166,19 +165,18 @@ int main()
                     {
                         achou_para_remover = 1;
                         
-                        // Sobrescreve o usuário removido movendo os elementos sucessores uma posição para trás
+                        // sobrescreve o usuario removido movendo os elementos sucessores uma posição pra tras
                         for (int j = i; j < total_users - 1; j++) 
                         {
                             clientes[j] = clientes[j + 1]; 
-                        } // Chave do for corrigida aqui
+                        }
+                        total_users--; // decrementa a contagem
                         
-                        total_users--; // Decrementa a contagem
-                        
-                        // Reajusta o bloco de memória para refletir o novo tamanho
+                        // reajusta o bloco de memoria para refletir o novo tamanho do vetor
                         if (total_users > 0) {
                             clientes = realloc(clientes, total_users * sizeof(user));
                         } else {
-                            // Se era o único usuário, libera a memória completamente
+                            // se era o unico usuario libera a memoria completamente
                             free(clientes);
                             clientes = NULL;
                         }
@@ -199,24 +197,24 @@ int main()
         }
     }
 
-    // --- GERANDO O ARQUIVO DE SAÍDA ---
-    // A função fopen com modo "w" (write) cria o arquivo (ou sobrescreve se já existir)
+    
+    // a função fopen com modo "w" (write) cria o arquivo
     FILE *arquivo = fopen("example.txt", "w");
     
     if (arquivo != NULL) 
     {
         for(int i = 0; i < total_users; i++)
         {
-            // fprintf funciona exatamente como o printf, mas direciona a saída para o arquivo de texto
+            // direcionando a saída para o arquivo de texto
             fprintf(arquivo, "%s, %d, %.2lf\n", clientes[i].nome, clientes[i].idade, clientes[i].saldo_atual);
         }
-        fclose(arquivo); // É obrigatório fechar o arquivo para salvar fisicamente no disco
+        fclose(arquivo); // é obrigatório fechar o arquivo pra salvar fisicamente no disco
     }
 
-    // Liberação final da memória Heap alocada antes do programa encerrar
+    // liberação final da memoria 
     if (clientes != NULL) {
         free(clientes);
     }
 
-    return 0; // Código de saída padrão indicando execução bem-sucedida
+    return 0; 
 }
