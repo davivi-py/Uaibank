@@ -1,4 +1,4 @@
-# UaiBank 💳
+# UaiBank 
 
 Sistema de gestão de usuários bancários desenvolvido em C, como projeto da disciplina **SSC0502 - Laboratório de Introdução à Ciência da Computação I** (ICMC-USP).
 
